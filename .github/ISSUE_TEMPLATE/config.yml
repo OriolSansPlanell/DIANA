@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://github.com/OriolSansPlanell/DIANA/blob/main/docs/index.md
+    about: Installation, concepts, pipeline, phantoms, artifacts and the API reference.
+  - name: Tutorials
+    url: https://github.com/OriolSansPlanell/DIANA/blob/main/tutorials/README.md
+    about: Seven notebooks that run on a laptop CPU.
+  - name: Security vulnerability
+    url: https://github.com/OriolSansPlanell/DIANA/security/advisories/new
+    about: Report security problems privately, not as an issue.

@@ -1,0 +1,51 @@
+name: Bug report
+description: Something raises an error or gives a wrong result
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Wrong physics counts as a bug too. Please check
+        `pytest -rx` first: known bugs are recorded there as expected failures.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include the full traceback, or the number you got and the number you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal code to reproduce
+      description: Small `N` and `n_angles`, `use_astra=False` if possible.
+      render: python
+      value: |
+        import neutron_xray_sim as nxs
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and why?
+      description: A reference value, paper or physical argument helps a lot.
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: >
+        Output of `python -c "import neutron_xray_sim, numpy, scipy, sklearn, skimage;
+        print(neutron_xray_sim.__version__, numpy.__version__, scipy.__version__,
+        sklearn.__version__, skimage.__version__)"`
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Linux, macOS, Windows, Other]
+  - type: dropdown
+    id: astra
+    attributes:
+      label: Is the ASTRA Toolbox (GPU) installed?
+      options: ["No (CPU backends)", "Yes", "Don't know"]
