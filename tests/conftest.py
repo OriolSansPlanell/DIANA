@@ -10,6 +10,13 @@ import pytest  # noqa: E402
 import neutron_xray_sim as nxs  # noqa: E402
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-reference", action="store_true", default=False,
+        help="regenerate tests/data/regression_reference.json (see test_regression.py)",
+    )
+
+
 @pytest.fixture
 def small_phantom():
     """A 32³ composite phantom — big enough to have every material."""
