@@ -1,0 +1,28 @@
+name: Feature / physics request
+description: A new material, phantom, artifact model, algorithm, metric or tutorial
+labels: [enhancement]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What would you like to simulate or measure?
+    validations:
+      required: true
+  - type: textarea
+    id: physics
+    attributes:
+      label: Physics and references
+      description: Paper, data source or model; cross-section or attenuation tables if relevant.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where would it live?
+      description: See "Where does my code go?" in CONTRIBUTING.md.
+      multiple: true
+      options: [physics, phantoms, acquisition, reconstruction, analysis, plotting, simulation, io, docs / tutorials, not sure]
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to implement this myself (a maintainer can help with the design first)

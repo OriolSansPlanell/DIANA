@@ -1,0 +1,28 @@
+# GitHub shows a "Cite this repository" button from this file, and Zenodo uses it
+# for the metadata of archived releases. Keep "version" and "date-released" in
+# step with neutron_xray_sim/_version.py and CHANGELOG.md (a test checks this).
+cff-version: 1.2.0
+message: "If you use DIANA, please cite the preprint (DOI below) and the software version you used."
+title: "DIANA: dual-modality neutron/X-ray tomography simulation and bimodal histogram analysis"
+type: software
+authors:
+  - family-names: Sans-Planell
+    given-names: Oriol
+    affiliation: Helmholtz-Zentrum Berlin für Materialien und Energie
+  - family-names: Dayani
+    given-names: Shahabeddin
+    affiliation: Helmholtz-Zentrum Berlin für Materialien und Energie
+version: "2.0.0"
+date-released: "2026-09-25"
+license: MIT
+repository-code: "https://github.com/OriolSansPlanell/DIANA"
+keywords:
+  - neutron imaging
+  - X-ray computed tomography
+  - multimodal tomography
+  - simulation
+  - bimodal histogram
+identifiers:
+  - type: doi
+    value: 10.21203/rs.3.rs-9724333/v1
+    description: Preprint describing DIANA (Research Square)

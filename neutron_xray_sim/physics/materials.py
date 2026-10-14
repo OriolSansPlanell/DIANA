@@ -53,7 +53,7 @@ __all__ = [
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Formula parsing  
+# Formula parsing
 # ──────────────────────────────────────────────────────────────────────────────
 
 _FORMULA_RE = re.compile(r"([A-Z][a-z]?)([0-9]*\.?[0-9]*)")
@@ -80,7 +80,7 @@ def _check_elements(comp: Dict[str, float], formula: str) -> None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Material dataclass  
+# Material dataclass
 # ──────────────────────────────────────────────────────────────────────────────
 
 @dataclass(eq=False)
@@ -314,7 +314,7 @@ def make_composite_material(
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Material database  
+# Material database
 # ──────────────────────────────────────────────────────────────────────────────
 
 MATERIALS: Dict[str, Material] = {
@@ -497,7 +497,7 @@ def register_material(key: str, material: Material, overwrite: bool = False) -> 
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# X-ray spectrum generation  
+# X-ray spectrum generation
 # ──────────────────────────────────────────────────────────────────────────────
 
 def xray_spectrum(
@@ -539,7 +539,7 @@ def xray_spectrum(
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Convenience aliases  
+# Convenience aliases
 # ──────────────────────────────────────────────────────────────────────────────
 AIR       = MATERIALS["air"]
 WATER     = MATERIALS["water"]

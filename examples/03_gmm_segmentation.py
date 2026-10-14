@@ -130,7 +130,7 @@ cbar = plt.colorbar(im_gt, ax=axes[0, 2], ticks=range(n_true))
 cbar.ax.set_yticklabels([m.symbol for m in result.phantom.materials], fontsize=7)
 
 # Row 2: segmentation for XY, XZ, YZ
-for col, (slice_gt, slice_seg, title) in enumerate([
+for col, (_slice_gt, slice_seg, title) in enumerate([
     (gt_vol[si],       seg_vol[si],       "GMM labels — XY"),
     (gt_vol[:, si, :], seg_vol[:, si, :], "GMM labels — XZ"),
     (gt_vol[:, :, si], seg_vol[:, :, si], "GMM labels — YZ"),

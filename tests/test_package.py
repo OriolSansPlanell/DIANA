@@ -53,7 +53,7 @@ def test_legacy_module_paths(old, name):
 def test_legacy_top_level_publication_plots():
     assert callable(nxs.plot_CE_vs_nprojections)
     with pytest.raises(AttributeError):
-        nxs.does_not_exist
+        nxs.does_not_exist  # noqa: B018
 
 
 def test_all_is_importable():

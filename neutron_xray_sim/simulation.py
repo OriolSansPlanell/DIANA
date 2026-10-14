@@ -156,7 +156,7 @@ class SimulationResult:
         titles_x = ["X-ray XY", "X-ray XZ", "X-ray YZ"]
         titles_n = ["Neutron XY", "Neutron XZ", "Neutron YZ"]
 
-        for col, (ax_x, ax_n, ttx, ttn, slc) in enumerate(zip(
+        for _col, (ax_x, ax_n, ttx, ttn, slc) in enumerate(zip(
             axes[0], axes[1], titles_x, titles_n,
             [
                 (self.vol_xray[si], self.vol_neutron[si]),
@@ -801,7 +801,8 @@ def run_artifact_survey(
                     exclude_air=True,
                 )
             except Exception as exc:  # noqa: BLE001 - keep the other runs
-                warnings.warn(f"[survey] metrics failed for '{tag}': {exc}")
+                warnings.warn(f"[survey] metrics failed for '{tag}': {exc}",
+                              stacklevel=2)
         if verbose:
             _print_survey_metrics_table(survey_metrics, algorithm)
 
