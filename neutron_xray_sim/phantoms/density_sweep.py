@@ -96,7 +96,7 @@ def phantom_density_preflight(
         case_dir.mkdir(parents=True, exist_ok=True)
         truth.to_csv(case_dir / "particle_truth.csv", index=False)
         np.save(case_dir / "ground_truth_labels.npy", phantom.label_vol)
-        with open(case_dir / "phantom_config.json", "w") as f:
+        with open(case_dir / "phantom_config.json", "w", encoding="utf-8") as f:
             json.dump(cfg.__dict__, f, indent=2)
 
         rows.append({

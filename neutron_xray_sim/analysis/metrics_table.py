@@ -305,7 +305,7 @@ class HistogramMetricsTable:
         records = self.to_records()
         if not records:
             raise ValueError("No metrics to write.")
-        with open(path, "w", newline="") as f:
+        with open(path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=list(records[0].keys()))
             writer.writeheader()
             writer.writerows(records)

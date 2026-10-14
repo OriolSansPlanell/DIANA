@@ -218,7 +218,7 @@ def _as_float(value) -> float:
     try:
         return float(value)
     except TypeError:
-        return float(getattr(value, "value"))
+        return float(value.value)
 
 
 def _xsect_barn(process, wl_A: np.ndarray) -> np.ndarray:

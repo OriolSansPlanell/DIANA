@@ -489,7 +489,8 @@ def reconstruct(
         alg = "FBP"
 
     if alg == "GRIDREC" and not _tomopy_ok():
-        warnings.warn("TomoPy not available — falling back to skimage FBP.")
+        warnings.warn("TomoPy not available — falling back to skimage FBP.",
+                      stacklevel=2)
         alg = "FBP"
 
     if use_gpu:
@@ -529,7 +530,8 @@ def reconstruct(
                     # failure, then fall back to the validated skimage iradon.
                     warnings.warn(
                         f"FBP_CUDA failed ({_fbp_err!s}); "
-                        "falling back to skimage iradon."
+                        "falling back to skimage iradon.",
+                        stacklevel=2,
                     )
                     try:
                         astra.algorithm.delete(alg_id)

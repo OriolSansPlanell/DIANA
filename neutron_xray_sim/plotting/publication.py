@@ -920,7 +920,7 @@ def plot_pairwise_overlap_vs_nprojections(n_proj_vals, overlap_data,
     colors = ['#2471A3', '#C0392B', '#1E8449', '#8E44AD', '#D35400', '#7F8C8D']
     pair_labels = [f'{sa}\u2013{sb}' for sa, sb in overlap_data.keys()]
 
-    for ((sa, sb), vals), ls, col in zip(overlap_data.items(), linestyles, colors):
+    for (_pair, vals), ls, col in zip(overlap_data.items(), linestyles, colors):
         ax.plot(n_proj_vals, vals, ls, color=col, lw=2.0, ms=7,
                 marker='o', markeredgecolor='black', markeredgewidth=0.7)
 

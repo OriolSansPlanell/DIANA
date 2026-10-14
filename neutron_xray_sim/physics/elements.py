@@ -132,7 +132,7 @@ def _parse_xcom_txt(filepath: Path):
     mu_over_rho  : np.ndarray   total attenuation *with* coherent scattering
     """
     energies, mu_vals = [], []
-    with open(filepath, "r") as f:
+    with open(filepath, encoding="utf-8") as f:
         for line in f:
             parts = line.strip().split()
             if len(parts) < 8:
