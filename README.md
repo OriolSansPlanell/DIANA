@@ -1,10 +1,15 @@
 # DIANA
 
+[![CI](https://github.com/OriolSansPlanell/DIANA/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/OriolSansPlanell/DIANA/actions/workflows/tests.yml)
+[![Python 3.9–3.13](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Preprint DOI](https://img.shields.io/badge/preprint-10.21203%2Frs.3.rs--9724333%2Fv1-informational)](https://doi.org/10.21203/rs.3.rs-9724333/v1)
+
 **A simulation toolkit for dual-modality neutron / X-ray tomography and bimodal-histogram analysis.**
 
 Python package import name: `neutron_xray_sim` · Version 2.0.0 ·
 [Tutorials](tutorials/README.md) · [Documentation](docs/index.md) ·
-[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
+[Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md)
 
 ---
 
@@ -179,9 +184,10 @@ DIANA/
 ├── tutorials/                 # step-by-step executable notebooks — start here
 ├── examples/                  # non-interactive scripts reproducing the main figures
 ├── notebooks/                 # research / paper notebooks (GPU, large N)
-├── tests/                     # pytest suite (run: pytest)
+├── tests/                     # pytest suite (run: pytest); data/ holds regression values
 ├── docs/                      # documentation
 ├── results/                   # selected published figures
+├── .github/                   # CI and release workflows, issue/PR templates
 └── pyproject.toml             # packaging, dependencies, tool config
 ```
 
@@ -199,6 +205,10 @@ kind of code belongs, and the test / notebook conventions. In short:
 ```bash
 pip install -e ".[dev,notebooks]" && pre-commit install && pytest
 ```
+
+Every push and pull request is tested by CI on Linux, macOS and Windows; see
+[ROADMAP.md](ROADMAP.md) for planned work and `pytest -rx` for known bugs waiting
+for a fix. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
@@ -227,5 +237,7 @@ or pasted into the GitHub wiki:
 ## Citing and license
 
 Author: Built and maintained by Dr. Oriol Sans-Planell and Dr. Shahabeddin Dayani. Helmholtz-Zentrum Berlin.
-Under MIT licence. 
-If you use this work or want to cite us, please use the following DOI: https://doi.org/10.21203/rs.3.rs-9724333/v1 
+Under MIT licence.
+If you use this work or want to cite us, please use the following DOI: https://doi.org/10.21203/rs.3.rs-9724333/v1
+and the software version you used. GitHub's **"Cite this repository"** button (from
+[`CITATION.cff`](CITATION.cff)) gives the reference in APA and BibTeX.

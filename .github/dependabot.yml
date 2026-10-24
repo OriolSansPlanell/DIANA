@@ -1,0 +1,15 @@
+# Keeps the GitHub Actions used by the workflows up to date (one grouped PR a
+# month). Python dependencies are not bumped automatically: pyproject.toml holds
+# *minimum* versions on purpose, and the weekly scheduled CI run tests against
+# the newest releases anyway.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci

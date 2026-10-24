@@ -531,7 +531,7 @@ def make_li_ion_battery_phantom(
     jellyroll_inner_radius = rod_outer_radius + jellyroll_inner_gap
     jellyroll_outer_radius = inner_can_radius - 0.02  # small clearance
     # Jellyroll starts exactly where rod starts
-    jellyroll_z_min = rod_bottom_z 
+    jellyroll_z_min = rod_bottom_z
 
     # It fills upward but still respects top clearance
     jellyroll_z_max = min(

@@ -1,6 +1,64 @@
 # Changelog
 
 All notable changes to DIANA (`neutron_xray_sim`). Dates are ISO-8601.
+Add your entry under **[Unreleased]** in the same pull request as the change.
+
+## [Unreleased]
+
+Collaboration set-up. **No simulated numbers change** (checked by the new
+regression guard).
+
+### Added
+
+* **CI on every push to every branch and on every pull request**
+  (`.github/workflows/tests.yml`): pre-commit lint; tests on Linux with Python
+  3.9–3.13 and on macOS and Windows; a run against the oldest dependency versions
+  allowed by `pyproject.toml`; coverage with a fail-under gate (80 %, GUI excluded);
+  tutorial execution; sdist/wheel build, `twine check` and a smoke test of the
+  installed wheel; a weekly scheduled run against the newest dependency releases;
+  and a single "All checks passed" status for branch protection.
+* **Release workflow** (`.github/workflows/release.yml`): pushing a `vX.Y.Z` tag
+  checks that the tag, `_version.py`, `CITATION.cff` and the changelog agree, builds
+  the package and creates a GitHub Release with the changelog section as notes
+  (archived automatically once the Zenodo integration is switched on). Optional PyPI
+  publishing with trusted publishing.
+* **Tests: 65 → 409, coverage 43 % → 86 %** (GUI excluded). New test files cover
+  cone-beam / laminography geometry and the 3-D noise model, Fourier fusion, NMC
+  particle phantoms, density sweeps, particle metrics, neutron spectra, Poisson noise
+  and detectability, CPU reconstruction, the volume importer, the metrics table, the
+  simulation cache and the publication figures.
+* **Numerical regression guard** (`tests/test_regression.py`): material tables,
+  beam-averaged μₙ, phantom, sinograms, detection chain and FBP values are compared
+  with `tests/data/regression_reference.json`; regenerate it with
+  `pytest tests/test_regression.py --update-reference` when numbers change on purpose.
+* **Repository consistency tests** (`tests/test_repository.py`): version, changelog
+  and citation agree; relative links in all Markdown files resolve; every notebook and
+  example uses only API names that exist (this covers the research notebooks against
+  the v2.0 layout).
+* **Known bugs recorded as strict `xfail` tests** (29 tests, ~20 distinct bugs;
+  `pytest -rx` lists them). Fixing a bug makes its test fail until the marker is
+  removed, so the list stays accurate.
+* `pre-commit` now also installs a **pre-push hook that runs the fast tests**, and
+  checks YAML/TOML, line endings and file-name case conflicts.
+* `CITATION.cff` ("Cite this repository" button, Zenodo metadata),
+  `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), `SECURITY.md`, `ROADMAP.md`,
+  `.github/CODEOWNERS`, issue forms, Dependabot for GitHub Actions, `.gitattributes`.
+
+### Fixed
+
+* `HistogramMetricsTable.to_csv` raised `UnicodeEncodeError` on Windows (it used the
+  locale encoding for text containing `cm⁻¹`, `—`, `↔`); files are now written as
+  UTF-8. Element data files and density-sweep configs are also read/written as UTF-8.
+* Warnings about reconstruction fallbacks and failed survey metrics now point at the
+  caller (`stacklevel=2`).
+
+### Changed
+
+* Packaging uses PEP 639 licence metadata (`license = "MIT"`, `license-files`);
+  building needs setuptools ≥ 77 (the old table form stops building in Feb 2027).
+* Ruff additionally enforces flake8-bugbear (`B`); pytest runs with
+  `--strict-markers` and `xfail_strict`.
+* `tifffile` is part of the `dev` extra, so the TIFF importer is tested.
 
 ## [2.0.0] — 2026-09-25
 

@@ -1,0 +1,16 @@
+# Normalise line endings so Windows and macOS/Linux contributors produce the same
+# diffs; working copies on Windows can still use CRLF.
+* text=auto eol=lf
+
+# Binary formats: never touch line endings or try to diff them as text.
+*.png  binary
+*.jpg  binary
+*.tif  binary
+*.tiff binary
+*.npy  binary
+*.npz  binary
+*.h5   binary
+*.pdf  binary
+
+# Keep generated figures out of the language statistics and collapse them in PRs.
+results/** linguist-generated=true

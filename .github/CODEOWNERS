@@ -1,0 +1,4 @@
+# Code owners are requested for review automatically on pull requests.
+# Add a line per subpackage as more people take responsibility for one, e.g.
+#   /neutron_xray_sim/physics/   @someone
+*                                @OriolSansPlanell

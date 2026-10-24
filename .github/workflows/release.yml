@@ -1,0 +1,88 @@
+# Publishing a release: bump neutron_xray_sim/_version.py and CITATION.cff, move
+# the CHANGELOG [Unreleased] entries under a new "## [X.Y.Z] — YYYY-MM-DD"
+# heading, merge to main, then push a tag:
+#
+#     git tag -a vX.Y.Z -m "DIANA X.Y.Z" && git push origin vX.Y.Z
+#
+# This workflow checks that the tag, the code and the changelog agree, builds the
+# package, and creates the GitHub Release with the changelog section as notes.
+# With the Zenodo GitHub integration switched on (zenodo.org → GitHub), every
+# release is archived automatically and gets a citable DOI.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Tag, package version, citation and changelog agree
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          code=$(python -c "import re;print(re.search(r'\"(.+)\"', open('neutron_xray_sim/_version.py').read()).group(1))")
+          cff=$(sed -n 's/^version: *"\{0,1\}\([^"]*\)"\{0,1\} *$/\1/p' CITATION.cff)
+          echo "tag=$tag code=$code citation=$cff"
+          [ "$tag" = "$code" ] || { echo "::error::tag v$tag != _version.py $code"; exit 1; }
+          [ "$tag" = "$cff" ] || { echo "::error::tag v$tag != CITATION.cff $cff"; exit 1; }
+          grep -q "^## \[$tag\]" CHANGELOG.md || { echo "::error::no '## [$tag]' in CHANGELOG.md"; exit 1; }
+          echo "version=$tag" >> "$GITHUB_OUTPUT"
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="${{ steps.version.outputs.version }}" '
+            $0 ~ "^## \\[" v "\\]" {on=1; next}
+            on && /^## \[/ {exit}
+            on {print}' CHANGELOG.md > release-notes.md
+          cat release-notes.md
+      - run: pip install build twine && python -m build && twine check --strict dist/*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: |
+            dist/
+            release-notes.md
+
+  github-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+      - uses: softprops/action-gh-release@v3
+        with:
+          name: DIANA ${{ needs.build.outputs.version }}
+          body_path: release-notes.md
+          files: dist/*
+          prerelease: ${{ contains(needs.build.outputs.version, 'rc') || contains(needs.build.outputs.version, 'b') }}
+
+  # Optional: publish to PyPI with trusted publishing (no token stored here).
+  # Switch on by creating the repository variable PUBLISH_TO_PYPI = true and
+  # registering this workflow as a trusted publisher on pypi.org.
+  pypi:
+    needs: build
+    if: vars.PUBLISH_TO_PYPI == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
