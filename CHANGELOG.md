@@ -46,6 +46,13 @@ regression guard).
 
 ### Fixed
 
+* **ASTRA forward projection was broken**: `line_integrals` (and therefore
+  `make_sinogram_pair`, `project_xray`, `project_neutron` with `use_astra=True`)
+  called `astra.create_sino(data, proj_geom, vol_geom)`, a signature current ASTRA
+  releases no longer accept (`TypeError: an integer is required`). It now creates one
+  projector (`cuda` when available, else `linear` / `line_fanflat`), passes its id to
+  `create_sino` and releases it afterwards, as the reconstruction code already did.
+  The CPU path and all simulated numbers are unchanged.
 * `HistogramMetricsTable.to_csv` raised `UnicodeEncodeError` on Windows (it used the
   locale encoding for text containing `cm⁻¹`, `—`, `↔`); files are now written as
   UTF-8. Element data files and density-sweep configs are also read/written as UTF-8.
