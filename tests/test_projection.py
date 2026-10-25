@@ -64,3 +64,55 @@ def test_reconstruct_unknown_algorithm():
     with pytest.raises(ValueError, match="Unknown algorithm"):
         nxs.reconstruct({"sino_lam": np.zeros((2, 1, 4)), "angles_deg": np.zeros(2)},
                         algorithm="magic")
+
+
+def test_astra_line_integrals_use_a_projector_id(monkeypatch):
+    # Regression: the ASTRA branch of ``line_integrals`` called
+    # ``astra.create_sino(data, proj_geom, vol_geom)``, a signature ASTRA dropped
+    # years ago; current releases take ``create_sino(data, proj_id)`` and raised
+    # ``TypeError: an integer is required``. CI has no ASTRA, so the branch is
+    # exercised with a stub module that enforces the real signature and whose
+    # "forward projection" is the CPU projector, so the output can be checked too.
+    import sys
+    import types
+
+    import neutron_xray_sim.acquisition.projector as proj
+
+    created, deleted = [], []
+    PROJ_ID = 7
+
+    def create_projector(proj_type, proj_geom, vol_geom):
+        assert proj_type in ("linear", "line_fanflat", "cuda")
+        created.append(proj_type)
+        return PROJ_ID
+
+    def create_sino(data, proj_id, *args, **kwargs):
+        if not isinstance(proj_id, int):           # what real ASTRA does with a dict
+            raise TypeError("an integer is required")
+        assert proj_id == PROJ_ID
+        sino = line_integrals(np.asarray(data)[None], _angles, use_astra=False)[:, 0, :]
+        return 11, sino
+
+    stub = types.SimpleNamespace(
+        use_cuda=lambda: False,
+        create_vol_geom=lambda *a: {"vol": a},
+        create_proj_geom=lambda *a: {"proj": a},
+        create_projector=create_projector,
+        create_sino=create_sino,
+        data2d=types.SimpleNamespace(delete=lambda i: None),
+        projector=types.SimpleNamespace(delete=deleted.append),
+    )
+    monkeypatch.setitem(sys.modules, "astra", stub)
+    monkeypatch.setattr(proj, "ASTRA_OK", True)
+
+    rng = np.random.default_rng(3)
+    vol = rng.random((3, 16, 16)).astype(np.float32)
+    _angles = np.linspace(0, 180, 12, endpoint=False)
+
+    gpu = line_integrals(vol, _angles, use_astra=True)
+    cpu = line_integrals(vol, _angles, use_astra=False)
+
+    assert created == ["linear"]            # one projector for all slices …
+    assert deleted == [PROJ_ID]             # … released afterwards
+    assert gpu.shape == cpu.shape == (12, 3, 16)
+    np.testing.assert_allclose(gpu, cpu, atol=1e-6)

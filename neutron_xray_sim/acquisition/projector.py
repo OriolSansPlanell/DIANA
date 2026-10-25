@@ -185,12 +185,19 @@ def line_integrals(
                 "fanflat", 1.0, det_count, angles_rad, SOD, SDD - SOD)
         else:
             proj_geom = astra.create_proj_geom("parallel", 1.0, n_det, angles_rad)
-        for s_idx in range(n_slices):
-            sino_id, sino = astra.create_sino(
-                np.ascontiguousarray(vol3d[s_idx], dtype=np.float32),
-                proj_geom, vol_geom)
-            astra.data2d.delete(sino_id)
-            out[:, s_idx, :] = _fit_detector(sino, n_det)
+        # astra.create_sino takes a projector id (create_sino(data, proj_id)); the older
+        # create_sino(data, proj_geom, vol_geom) form raises "an integer is required".
+        proj_type = ("cuda" if astra.use_cuda()
+                     else ("line_fanflat" if geometry == "cone" else "linear"))
+        proj_id = astra.create_projector(proj_type, proj_geom, vol_geom)
+        try:
+            for s_idx in range(n_slices):
+                sino_id, sino = astra.create_sino(
+                    np.ascontiguousarray(vol3d[s_idx], dtype=np.float32), proj_id)
+                astra.data2d.delete(sino_id)
+                out[:, s_idx, :] = _fit_detector(sino, n_det)
+        finally:
+            astra.projector.delete(proj_id)
         return out
 
     vol = np.asarray(vol3d, dtype=np.float32)
